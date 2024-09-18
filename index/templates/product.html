@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<head>
+    <meta charset="UTF-8">
+    <title>Продукт</title>
+</head>
+<body class="bg bg-dark">
+<div class="container px-4 py-5">
+    {% for p in products %}
+    <h1 class="text-white">{{ p.pr_name }}</h1>
+    <img src="{{ p.pr_photo.url }}" alt="{{ p.pr_name}}" width="350" height="250">
+    <br>
+
+    <h3 class="text-white">Описание: {{ p.pr_des }}</h3>
+    <br>
+    {% if user.is_authenticated %}
+    <h3 class="text-white">Цена: {{ p.pr_price }}</h3>
+    <form action="/to-cart/{{ p.id }}" method="post">
+        {% csrf_token %}
+        <input type="number" min="1" name="pr_quantity">
+        <button type="submit" class="btn btn-success"> Добавить в корзину</button>
+    </form>
+    {% else %}
+    <h1 class="text-white">Войдите или зарегайтесь для покупки товара </h1>
+    <a href="/register" class="nav-link active">Регистраци</a>
+    <a href="/accounts/login" class="nav-link active">Войти</a>
+    {% endif %}
+    {% endfor %}
+</div>
+</body>
+</html>
